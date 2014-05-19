@@ -1,0 +1,12 @@
+# Utility to clear out the OpenHDS databases and start fresh.
+# Assumes run from the folder with this and other OpenHDS helper scripts.
+# Must pass in an SQL script that contains baseline data for OpenHDS,
+# like bsh-baseline.sql.
+
+mysql --user=root openhds < init-openhds-db.sql
+mysql --user=root openhds < ../openhds-server/web/src/main/resources/openhds-schema.sql
+mysql --user=root openhds < ../openhds-server/web/src/main/resources/openhds-required-data.sql
+mysql --user=root openhds < $1
+
+mysql --user=root odk_prod < clear-odk-db.sql
+
