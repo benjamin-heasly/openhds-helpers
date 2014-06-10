@@ -2,6 +2,7 @@
 	<constraint id="socialGroupTypeConstraint">
 		<value description="Family">FAM</value>
 		<value description="Cohort">COH</value>
+                <value description="Household">Household</value>
 	</constraint>
 	<constraint id="dobAspectConstraint">
 		<value description="Exact">1</value>
@@ -14,6 +15,7 @@
 	<constraint id="locationTypeConstraint">
 		<value description="Rural">RUR</value>
 		<value description="Urban">URB</value>
+                <value description="Household">Household</value>
 	</constraint>
 	<constraint id="yesNoConstraint">
 		<value description="Yes">1</value>

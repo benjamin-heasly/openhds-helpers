@@ -1,31 +1,19 @@
 # Utility to pull down new versoin of OpenHDS server, build, and redeploy.
-# Assumes run from the folder with this and other OpenHDS helper scripts.
-# Assumes Maven project for server is located in ../openhds-server
-# Assumes Tomcat is located in ../apache-tomcat-6.0.37
-
-HELPER_DIR=`pwd`
-PROJECT_DIR=$HELPER_DIR/../openhds-server
-APACHE_DIR=$HELPER_DIR/../apache-tomcat-6.0.37
-
-./stop-tomcat-6.sh
+source openhds-tomcat-env.sh
 
 # update the server code
-cd $PROJECT_DIR
-git stash
+cd $SOURCE_FOLDER
 git pull
-git stash apply
 
-# redeploy the server with custom database config
-cp -f $HELPER_DIR/database.properties $PROJECT_DIR/web/src/main/resources
-mvn clean install
-sudo rm -rf $APACHE_DIR/webapps/openhds
-cp -f $PROJECT_DIR/web/target/openhds.war $APACHE_DIR/webapps/
+# lay down project configuration 
+cp -f $HELPERS_FOLDER/codes.properties $SOURCE_FOLDER/web/src/main/resources/
+cp -f $HELPERS_FOLDER/database.properties $SOURCE_FOLDER/web/src/main/resources
+cp -f $HELPERS_FOLDER/location-levels.properties $SOURCE_FOLDER/web/src/main/resources
+cp -f $HELPERS_FOLDER/site-config.properties $SOURCE_FOLDER/controller/src/main/resources
+cp -f $HELPERS_FOLDER/value-constraint.xml $SOURCE_FOLDER/domain/src/main/resources
 
-# try to save space
-mvn clean
+# rebuild and redeploy the webapp
+mvn clean install -DskipTests
+sudo rm -rf $TOMCAT_FOLDER/webapps/openhds*
+cp -f $SOURCE_FOLDER/web/target/openhds.war $TOMCAT_FOLDER/webapps/
 
-# lay down baseline OpenHDS data
-cd $HELPER_DIR
-./apply-openhds-baseline-data bsh-bioko-baseline.sql
-
-./restart-tomcat-6.sh
