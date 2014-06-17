@@ -4,6 +4,7 @@ source openhds-tomcat-env.sh
 # update the server code
 cd $SOURCE_FOLDER
 git pull
+git checkout biokoForms
 
 # lay down project configuration 
 cp -f $HELPERS_FOLDER/codes.properties $SOURCE_FOLDER/web/src/main/resources/
